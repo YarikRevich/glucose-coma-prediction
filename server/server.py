@@ -7,6 +7,8 @@ from server.tools import get_xgb_model, get_random_forest_model, get_neuron_mode
 def run(file: str) -> None:
     """Starts server configuration."""
     
+    print("Starting server!")
+    
     xgb_model = get_xgb_model(file)
     
     random_forest_model = get_random_forest_model(file)
