@@ -11,3 +11,7 @@ https://docs.aws.amazon.com/images/sagemaker/latest/dg/images/xgboost_illustrati
 Train data are generated with a help of a script, which was created based on real-person data with unstable glucose level and then scaled it with one month perspective having similar trend.
 
 Data still requires tweaking
+
+
+https://www.learndatasci.com/glossary/precision-and-recall/
+

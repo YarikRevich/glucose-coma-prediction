@@ -1,11 +1,11 @@
 import numpy as np
-from loader import CSVDataset
+from model.loader import CSVDataset
 from torch.utils.data import DataLoader, random_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 
-__all__ = ["get_train_data", "check_accuracy"]
+__all__ = ["get_processed_train_data", "get_raw_train_data", "check_accuracy"]
 
-def get_train_data(dataset: CSVDataset) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def get_processed_train_data(dataset: CSVDataset) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Splits provided raw dataset into train and test arrays."""
     
     train_dataset, test_dataset = random_split(dataset, [0.8, 0.2])
@@ -35,6 +35,20 @@ def get_train_data(dataset: CSVDataset) -> tuple[np.ndarray, np.ndarray, np.ndar
     y_test = np.concatenate(y_test, axis=0)
     
     return (X_train, y_train, X_test, y_test)
+
+
+def get_raw_train_data(dataset: CSVDataset) -> tuple[DataLoader, DataLoader, DataLoader]:
+    """Splits provided raw dataset into train, test and validation arrays."""
+    
+    train_dataset, test_dataset, valid_dataset = random_split(dataset, [0.7, 0.2, 0.1])
+    
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+    
+    valid_loader = DataLoader(valid_dataset, batch_size=32, shuffle=False)
+    
+    return (train_loader, test_loader, valid_loader)
 
 
 def check_accuracy(y_test: np.ndarray, y_pred: np.ndarray) -> None:

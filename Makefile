@@ -8,14 +8,14 @@ help:
 
 .PHONY: generate
 generate: ## Generates train data for the model
-	@python3 script/script.py $(sample)
+	@python3 main.py generate $(sample)
 	@echo "Train data is generated and saved to $(sample)!"
 
 .PHONY: build
 build: ## Builds model
-	@python3 model/model.py $(sample) $(model)
+	@python3 main.py build $(sample) $(model)
 	@echo "Model is built and saved!"
 
 .PHONY: start
 start: ## Starts server application
-	@python3 server/server.py $(model)
+	@python3 main.py start $(model)

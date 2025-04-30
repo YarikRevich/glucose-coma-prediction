@@ -1,8 +1,9 @@
 import csv
 import random
-import sys
 
-HOURS = 24 * 30 * 6
+__all__ = ["run"]
+
+HOURS = 24 * 365
 MEASUREMENTS_PER_HOUR = 60
 
 WARNING_SLOPE_THRESHOLD = -15
@@ -15,7 +16,9 @@ EXTREME_START_PROB = 0.02
 COMA_LOW_PROB = 0.0003
 COMA_HIGH_PROB = 0.0002
 
-def main(output: str) -> None:
+def run(output: str) -> None:
+    """Starts generation script."""
+    
     if random.random() < EXTREME_START_PROB:
         glucose = random.choice([
             random.randint(30, 44),    
@@ -127,9 +130,3 @@ def main(output: str) -> None:
             flat_row = {"future_label": row["future_label"]}
             flat_row.update({f"glucose_{i+1}": row["glucose_values"][i] for i in range(MEASUREMENTS_PER_HOUR)})
             writer.writerow(flat_row)
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise Exception("Not enough arguments provided!")
-    
-    main(sys.argv[1])
