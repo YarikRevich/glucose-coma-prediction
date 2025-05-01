@@ -7,7 +7,7 @@ from torch.nn.modules.batchnorm import BatchNorm1d
 from torch.nn.modules.activation import ReLU
 from torch.nn.modules.dropout import Dropout
 
-__all__ = ["get_xgb_model", "get_random_forest_model", "get_neuron_model", "NEURON_MODEL", "XGB_MODEL", "RANDOM_FOREST_MODEL"]
+__all__ = ["get_xgb_model", "get_random_forest_model", "get_delta", "get_neuron_model", "NEURON_MODEL", "XGB_MODEL", "RANDOM_FOREST_MODEL"]
 
 # Represents neuron model name.
 NEURON_MODEL = "neuron_model"
@@ -34,3 +34,19 @@ def get_neuron_model(file: str) -> FFNetwork:
     torch.serialization.add_safe_globals([FFNetwork, Sequential, Linear, BatchNorm1d, ReLU, Dropout])
     
     return torch.load(f"{file}.neuron")
+
+def get_delta(data: list[float]) -> list[float]:
+    """Performs delta value calculation."""
+    
+    result = []
+    
+    previous = data[0]
+    delta = 0
+    
+    for entity in data:
+        delta = entity - previous
+        previous = entity
+        
+        result.append(delta)
+        
+    return result

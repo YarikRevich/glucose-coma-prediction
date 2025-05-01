@@ -1,6 +1,6 @@
 import torch
 from typing import Any
-from server.tools import NEURON_MODEL, XGB_MODEL, RANDOM_FOREST_MODEL
+from server.tools import NEURON_MODEL, XGB_MODEL, RANDOM_FOREST_MODEL, get_delta
 from model.trainer.ff.ff import FFNetwork
 from flask import Flask, request
 from flask_socketio import SocketIO, emit
@@ -23,19 +23,25 @@ def connect():
 
 @socketio.on("xgb")
 def xgb(data: list[float]) -> None:
-    prediction = models[XGB_MODEL].predict([data])
+    slopes = get_delta(data)
+    
+    prediction = models[XGB_MODEL].predict([data + slopes + get_delta(slopes)])
     
     emit("xgb_response", {"prediction": int(prediction[0])}, room=request.sid)
 
 @socketio.on("random_forest")
 def random_forest(data: list[float]) -> None:
-    prediction = models[RANDOM_FOREST_MODEL].predict([data])
+    slopes = get_delta(data)
+    
+    prediction = models[RANDOM_FOREST_MODEL].predict([data + slopes + get_delta(slopes)])
     
     emit("random_forest_response", {"prediction": round(prediction[0])}, room=request.sid)
 
 @socketio.on("neuron")
 def neuron(data: list[float]) -> None:
-    outputs = models[NEURON_MODEL](torch.tensor([data], dtype=torch.float32)).squeeze()
+    slopes = get_delta(data)
+    
+    outputs = models[NEURON_MODEL](torch.tensor([data + slopes + get_delta(slopes)], dtype=torch.float32)).squeeze()
     
     preds = torch.round(torch.sigmoid(outputs)).detach().numpy()
     

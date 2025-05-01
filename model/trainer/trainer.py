@@ -71,8 +71,6 @@ def train_neural_model(size: int, train_loader: DataLoader, test_loader: DataLoa
     optimizer = optim.Adam(model.parameters(), lr=0.0005)
     
     dataloaders = {"train": train_loader, "val": valid_loader, "test": test_loader}
-    
-    best_model = None
 
     patience = 100
     best_val_loss = float('inf')
@@ -124,7 +122,6 @@ def train_neural_model(size: int, train_loader: DataLoader, test_loader: DataLoa
                 if epoch_loss < best_val_loss:
                     best_val_loss = epoch_loss
                     epochs_without_improvement = 0
-                    best_model = model.state_dict()
                 else:
                     epochs_without_improvement += 1
                     print(f"No improvement in {epochs_without_improvement} epochs.")
