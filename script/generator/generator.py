@@ -14,8 +14,8 @@ HYPERGLYCEMIA_THRESHOLD = 250
 SEVERE_HYPOGLYCEMIA_THRESHOLD = 45
 SEVERE_HYPERGLYCEMIA_THRESHOLD = 400
 
-PATIENT_COUNT = 100  
-MIN_DAYS = 10  
+PATIENT_COUNT = 300  
+MIN_DAYS = 100
 
 CRITICAL_DROP_PROB = 0.0005  
 CRITICAL_SPIKE_PROB = 0.0005 
@@ -145,8 +145,6 @@ def generate_hour_data(
     starting_glucose: int,
     previous_slope: float,
     profile: PatientProfile,
-    meal_schedule: List[Tuple[int, int]],
-    activity_schedule: List[Tuple[int, int, int]],
     meal_effects: Dict[int, float],
     activity_effects: Dict[int, float]
 ) -> Tuple[List[Dict], int, float]:
@@ -270,12 +268,12 @@ def calculate_meal_and_activity_effects(
     
     return meal_effects, activity_effects
 
-def generate(output: str, time=30, additional=True) -> None:
+def generate(output: str, time=MIN_DAYS, additional=True) -> None:
     """Generate glucose data for multiple patients over time"""
     
     all_data = []
 
-    for patient_idx in range(PATIENT_COUNT):
+    for _ in range(PATIENT_COUNT):
         patient_id = str(uuid.uuid4())[:8] 
         profile = PatientProfile(patient_id)
         
@@ -300,8 +298,6 @@ def generate(output: str, time=30, additional=True) -> None:
                     glucose, 
                     previous_slope, 
                     profile,
-                    meal_schedule,
-                    activity_schedule,
                     meal_effects,
                     activity_effects
                 )

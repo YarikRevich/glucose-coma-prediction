@@ -1,17 +1,61 @@
-We have 12 measures per hour. Data is lableed with "no risk" and "risk" based on some previous calculations. We'll use XGBoost classifier to have logical regression.
+# glucose-coma-prediction
 
-https://docs.aws.amazon.com/images/sagemaker/latest/dg/images/xgboost_illustration.png
+[![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
-* Slope (how fast the value is changing — first derivative)
-* Acceleration (how much the change itself is speeding up — second derivative)
-* Average glucose over last 15 minutes
-* Min and max glucose in the last hour
+## General Information
+
+This repository contains the implementation of glucose coma prediction model.
+
+## Dataset
+
+We collect 60 measurements per hour. Each data point is labeled as either “no risk” (0) or “risk” (1), based on prior calculations that incorporate features such as glucose delta values and their acceleration. The dataset is generated using a simulation script that models multiple virtual patients with diverse lifestyles, including varying meal schedules and sleep patterns.
+
+## Models
+
+There are implemented next models, which implement logical regression approach:
+* **XGBoost**
+* **RandomForest**
+* **Custom Nueral Model**
+
+After model training next quality parameters are calculated:
+* **Accuracy**: definies a proportion of classifications, which are correct
+* **Precision**: definies the quality of positive values, taking into account true positives and false positives
+* **Recall**: definies how often a model correctly identifies positive values
+* **F1 Score**: a mean of precision and recall
+* **ROC AUC**: represents if model would choose positive value over negative one
+* **Confusion Matrix**: TN, FP, FN, TP
+
+## Setup
+
+All setup related operations are processed via **Makefile** placed in the root directory.
+
+### Generate
+
+In order to generate data used for model training it's required to execute the next command:
+```shell
+make generate
+```
+
+### Build
+
+In order to build all the models, it's required to execute the next command:
+```shell
+make build
+```
 
 
-Train data are generated with a help of a script, which was created based on real-person data with unstable glucose level and then scaled it with one month perspective having similar trend.
+### Server
 
-Data still requires tweaking
+In order to start the **API server**, it's required to execute the next command:
+```shell
+make start-server
+```
 
 
-https://www.learndatasci.com/glossary/precision-and-recall/
+### Demo
+
+In order to start the demo application, it's required to execute the next command:
+```shell
+make start-demo
+```
 

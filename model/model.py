@@ -13,8 +13,8 @@ def run(data: str, output: str) -> None:
     
     train_xgb_model(X_train, y_train, X_test, y_test, output)
     
-    train_random_forest_model(X_train, y_train, X_test, y_test, output)
+    # train_random_forest_model(X_train, y_train, X_test, y_test, output)
     
-    train_loader, test_loader, valid_loader = get_raw_train_data(dataset)
+    # train_loader, test_loader, valid_loader = get_raw_train_data(dataset)
     
-    train_neural_model(X_train.shape[1], train_loader, test_loader, valid_loader, output)
+    # train_neural_model(X_train.shape[1], train_loader, test_loader, valid_loader, output)

@@ -15,19 +15,20 @@ def train_xgb_model(X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray
     """Trains XGB regression model with provided data."""
     
     print("Training XGB model!")
-
+    
     model = xgb.XGBClassifier(
         objective='binary:logistic',
         n_estimators=300,
-        learning_rate=0.1,
-        max_depth=10,
+        learning_rate=0.05,
+        max_depth=5,
         use_label_encoder=False,
-        eval_metric='merror'
+        eval_metric='logloss',
+        scale_pos_weight=3.01
     )
     
     model.fit(X_train, y_train)
 
-    y_pred = model.predict(X_test)
+    y_pred = (model.predict_proba(X_test)[:, 1] > 0.3).astype(int)
     
     check_accuracy(y_test, y_pred)
     
@@ -52,10 +53,10 @@ def train_random_forest_model(X_train: np.ndarray, y_train: np.ndarray, X_test: 
 
 
 # Represents max amount of epochs used for neural network model training.
-MAX_EPOCHS = 300
+MAX_EPOCHS = 100
 
 # Represents patience level used to wait for loss updates before stoping training process.
-PATIENCE = 100
+PATIENCE = 10
 
 def train_neural_model(size: int, train_loader: DataLoader, test_loader: DataLoader, valid_loader: DataLoader, output: str) -> None:
     """Trains NeuralNetwork model with provided data."""
